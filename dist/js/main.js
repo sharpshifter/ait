@@ -1,4 +1,12 @@
-$(document).ready(function () {
+/*!
+ * astrox-imperium-tools v0.0.1
+ * Various tools to do various things for the game Astrox Imperium
+ * (c) 2019 
+ * MIT License
+ * git+https://github.com/sharpshifter/ait.git
+ */
+
+$(document).ready((function () {
     /* Bootstrap  Material Design Theme JavaScript Bits */
 
     $sidebar = $('.sidebar');
@@ -7,7 +15,7 @@ $(document).ready(function () {
     $sidebar_responsive = $('body > .navbar-collapse');
     window_width = $(window).width();
 
-    $('.fixed-plugin a').click(function (event) {
+    $('.fixed-plugin a').click((function (event) {
         // If we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the section active
         if ($(this).hasClass('switch-trigger')) {
             if (event.stopPropagation) {
@@ -16,9 +24,9 @@ $(document).ready(function () {
                 window.event.cancelBubble = true;
             }
         }
-    });
+    }));
 
-    $('.fixed-plugin .active-color span').click(function () {
+    $('.fixed-plugin .active-color span').click((function () {
         $full_page_background = $('.full-page-background');
 
         $(this).siblings().removeClass('active');
@@ -37,9 +45,9 @@ $(document).ready(function () {
         if ($sidebar_responsive.length != 0) {
             $sidebar_responsive.attr('data-color', new_color);
         }
-    });
+    }));
 
-    $('.fixed-plugin .background-color .badge').click(function () {
+    $('.fixed-plugin .background-color .badge').click((function () {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
 
@@ -48,9 +56,9 @@ $(document).ready(function () {
         if ($sidebar.length != 0) {
             $sidebar.attr('data-background-color', new_color);
         }
-    });
+    }));
 
-    $('.fixed-plugin .img-holder').click(function () {
+    $('.fixed-plugin .img-holder').click((function () {
         $full_page_background = $('.full-page-background');
 
         $(this).parent('li').siblings().removeClass('active');
@@ -59,19 +67,19 @@ $(document).ready(function () {
         var new_image = $(this).find("img").attr('src');
 
         if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-            $sidebar_img_container.fadeOut('fast', function () {
+            $sidebar_img_container.fadeOut('fast', (function () {
                 $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
                 $sidebar_img_container.fadeIn('fast');
-            });
+            }));
         }
 
         if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
             var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
 
-            $full_page_background.fadeOut('fast', function () {
+            $full_page_background.fadeOut('fast', (function () {
                 $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
                 $full_page_background.fadeIn('fast');
-            });
+            }));
         }
 
         if ($('.switch-sidebar-image input:checked').length == 0) {
@@ -85,9 +93,9 @@ $(document).ready(function () {
         if ($sidebar_responsive.length != 0) {
             $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
         }
-    });
+    }));
 
-    $('.switch-sidebar-image input').change(function () {
+    $('.switch-sidebar-image input').change((function () {
         $full_page_background = $('.full-page-background');
 
         $input = $(this);
@@ -117,9 +125,9 @@ $(document).ready(function () {
 
             background_image = false;
         }
-    });
+    }));
 
-    $('.switch-sidebar-mini input').change(function () {
+    $('.switch-sidebar-mini input').change((function () {
         $body = $('body');
         $input = $(this);
 
@@ -133,24 +141,24 @@ $(document).ready(function () {
 
             $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
 
-            setTimeout(function () {
+            setTimeout((function () {
                 $('body').addClass('sidebar-mini');
 
                 md.misc.sidebar_mini_active = true;
-            }, 300);
+            }), 300);
         }
 
         // we simulate the window Resize so the charts will get updated in realtime.
-        var simulateWindowResize = setInterval(function () {
+        var simulateWindowResize = setInterval((function () {
             window.dispatchEvent(new Event('resize'));
-        }, 180);
+        }), 180);
 
         // we stop the simulation of Window Resize after the animations are completed
-        setTimeout(function () {
+        setTimeout((function () {
             clearInterval(simulateWindowResize);
-        }, 1000);
+        }), 1000);
 
-    });
+    }));
 
 
     // Javascript method's body can be found in assets/js/demos.js
@@ -164,4 +172,4 @@ $(document).ready(function () {
     * =========================
     * */
 
-});
+}));

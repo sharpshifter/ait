@@ -1,7 +1,7 @@
 .fixed-plugin {
   background: $fixed-plugin-bg-rgba;
 
-  .fa-cog {
+  .fa-comments-o {
     color: $card-category-color;
   }
 
@@ -24,6 +24,16 @@
       > a.img-holder:hover,
       &.active > a.img-holder {
         border-color: $badge-border-active-color;
+      }
+      > a {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+
+        > i.fa {
+          font-size: 1.7rem;
+          top: -1px;
+        }
       }
     }
   }

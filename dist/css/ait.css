@@ -1,0 +1,12 @@
+/*!
+ * astrox-imperium-tools v0.0.1
+ * Various tools to do various things for the game Astrox Imperium
+ * (c) 2019 
+ * MIT License
+ * git+https://github.com/sharpshifter/ait.git
+ */
+
+/* line 4, assets/scss/ait.scss */
+.card .card-header .card-title > i {
+  vertical-align: top;
+}

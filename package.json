@@ -1,7 +1,7 @@
 {
-  "name": "material-dashboard-dark",
-  "version": "2.1.0",
-  "description": "Material Dasboard Dark Edition, a Google Material Desgin. Coded by Creative Tim",
+  "name": "astrox-imperium-tools",
+  "version": "0.0.1",
+  "description": "Various tools to do various things for the game Astrox Imperium",
   "main": "index.html",
   "directories": {
     "example": "root"
@@ -11,39 +11,40 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard.git"
+    "url": "git+https://github.com/sharpshifter/ait.git"
   },
   "keywords": [
-    "material dashboard",
-    "bootstrap material admin",
-    "bootstrap material dashboard",
-    "material design admin",
-    "material design",
-    "creative tim",
-    "html dashboard",
-    "html css dashboard",
-    "web dashboard",
-    "freebie",
-    "free bootstrap dashboard",
-    "css3 dashboard",
-    "bootstrap admin",
-    "bootstrap dashboard",
-    "frontend",
-    "responsive bootstrap dashboard"
+    "atrox imperium tools"
   ],
   "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard/issues"
+    "url": "https://github.com/sharpshifter/ait/issues"
   },
   "devDependencies": {
+    "browser-sync": "2.26.3",
+    "del": "3.0.0",
     "gulp": "^4.0.0",
-    "gulp-autoprefixer": "^5.0.0",
+    "gulp-autoprefixer": "6.0.0",
     "gulp-clean": "^0.4.0",
+    "gulp-concat": "2.6.1",
+    "gulp-cssnano": "2.1.3",
+    "gulp-flatmap": "1.0.2",
+    "gulp-header": "2.0.7",
     "gulp-install": "^1.1.0",
+    "gulp-jshint": "2.1.0",
     "gulp-open": "^3.0.1",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5"
+    "gulp-optimize-js": "1.1.0",
+    "gulp-rename": "1.4.0",
+    "gulp-sass": "4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-svgmin": "2.1.0",
+    "gulp-terser": "1.1.7",
+    "gulp-wait": "0.0.2",
+    "jshint": "2.10.2",
+    "jshint-stylish": "2.2.1",
+    "lazypipe": "1.0.2"
   },
-  "homepage": "http://demos.creative-tim.com/material-dashboard-dark/examples/dashboard.html"
+  "homepage": "https://sharpshifter.net/ait/index.html",
+  "dependencies": {}
 }
