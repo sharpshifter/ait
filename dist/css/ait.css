@@ -6,23 +6,52 @@
  * git+https://github.com/sharpshifter/ait.git
  */
 
-/* line 4, assets/scss/ait.scss */
+/* line 1, assets/scss/ait.scss */
+body {
+  color: #8b92a9;
+}
+
+/* line 8, assets/scss/ait.scss */
 .card .card-header .card-title > i {
   vertical-align: top;
 }
 
-/* line 12, assets/scss/ait.scss */
-.processarrow1 > span {
-  display: inline-block;
+/* line 14, assets/scss/ait.scss */
+.card .card-body > i.material-icons, .card .card-body > i.material-icons-outlined, .card .card-body > i.fa {
+  vertical-align: top;
+}
+
+/* line 20, assets/scss/ait.scss */
+.btn-primary.disabled, .btn-primary:disabled {
+  cursor: not-allowed;
+}
+
+/* line 24, assets/scss/ait.scss */
+.fullwidth {
   width: 100%;
 }
 
-/* line 15, assets/scss/ait.scss */
-.processarrow1 > span > i {
-  font-size: 3rem;
+/* line 28, assets/scss/ait.scss */
+#shipdataexporter_sourcelabels {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
-/* line 21, assets/scss/ait.scss */
-.btn-primary.disabled, .btn-primary:disabled {
-  cursor: not-allowed;
+/* line 30, assets/scss/ait.scss */
+#shipdataexporter_sourcelabels > span.badge {
+  cursor: pointer;
+}
+
+/* line 32, assets/scss/ait.scss */
+#shipdataexporter_sourcelabels > span.badge:hover {
+  opacity: 0.85;
+}
+
+@media screen and (min-width: 1140px) {
+  /* line 39, assets/scss/ait.scss */
+  #shipdataexporter_generateoutput {
+    margin-right: -25px;
+  }
 }

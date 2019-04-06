@@ -13,7 +13,7 @@
 </head>
 
 <body class="dark-edition">
-  <div class="wrapper ">
+  <div class="wrapper">
     <div class="sidebar" data-color="purple" data-background-color="black" data-image="./dist/img/sidebar-2.jpg">
       <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
@@ -67,13 +67,17 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid">
-          <p class="text-light">Welcome to a collection of various tools to do various things relating to the game Astrox Imperium. Well it's not really a collection at the moment as there is only one tool (displayed below), but more should appear over time and be accessible via the side navigation.</p>
-          <hr>
-          <h3 class="text-light">Ship Info Exporter</h3>
-          <p class="text-light">Provided with the contents of a ship data file, this tool will allow you to customise and export the data into useful formats such as BBCode, Markdown and HTML. The output can then be pasted into other websites, for example Steam discussions or Nexus Mods.</p>
-          
           <div class="row">
+            <div class="col-sm-11 col-xs-12">
+              <p class="text-light">Welcome to a collection of various tools to do various things relating to the game Astrox Imperium. Well it's not really a collection at the moment as there is only one tool (displayed below), but more should appear over time and be accessible via the side navigation.</p>
+            </div>
+          </div>
+          <hr>
+          <div id="shipdataexporter" class="row">
             <div class="col-xl-4 col-xs-12">
+              <h3>Ship Info Exporter</h3>
+              <p>Provided with the contents of a ship data file, this tool will allow you to customise and export the data into useful formats such as BBCode, Markdown (eventually) and HTML (also eventually). The output can then be pasted into other websites, for example Steam discussions or Nexus Mods.</p>
+              <br>
               <div class="card">
                   <div class="card-header card-header-info">
                       <h4 class="card-title"><i class="material-icons-outlined mr-2">description</i> Source Ship Data</h4>
@@ -81,7 +85,7 @@
                 <div class="card-body">
                   <div class="form-group mt-3">
                       <label for="shipdataexporter_sourcedata">Paste the contents of a ship data file here:</label>
-                      <textarea class="form-control" id="shipdataexporter_sourcedata" rows="12"></textarea>
+                      <textarea class="form-control" id="shipdataexporter_sourcedata" rows="17"></textarea>
                       <div class="mt-3 text-right">
                         <button id="shipdataexporter_process" class="btn btn-primary disabled" onclick="ait.shipDataExporter.startProcess()">Process</button>
                       </div>
@@ -89,17 +93,50 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons-outlined mr-2">info</i> Ship data files can be found in the Astrox Imperium_Data\MOD\ships folder, inside your Astrox Imperium install directory.
+                    <i class="material-icons-outlined mr-2">info</i> Ship data files can be found in the Astrox Imperium_Data\MOD\ships folder, inside your Astrox Imperium install directory. File input is a planned feature!
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-xl-1 col-xs-12 d-none text-center processarrow1">
-              <span class="d-none d-xl-block"><i class="material-icons">keyboard_arrow_right</i></span>
-              <span class="d-xl-none"><i class="material-icons">keyboard_arrow_down</i></span>
-            </div>
-            <div class="col-xl-7 col-xs-12">
-              <div id="shipdataexporter_sourcelabels"></div>
+            <div id="shipdataexporter_labelsandtemplate" class="col-xl-8 col-xs-12 d-none">
+              <div class="card mb-1">
+                <div class="card-header card-header-info">
+                    <h4 class="card-title"><i class="material-icons-outlined mr-2">label</i> Labels</h4>
+                </div>
+                <div class="card-body">
+                  <div id="shipdataexporter_sourcelabels"></div>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons-outlined mr-2">info</i> Click a label to insert its Name and Value tags into the template. Shift+click inserts just its Name tag. Alt+click inserts just its Value tag.
+                  </div>
+                </div>
+              </div>
+              <small>&nbsp;</small>
+              <div class="card">
+                <div class="card-header card-header-info">
+                  <h4 class="card-title"><i class="material-icons-outlined mr-2">web</i> Template Editor</h4>
+                </div>
+                <div class="card-body">
+                  <div class="form-group mt-3">
+                    <p>Design your template in the editor below. Clicking a label above will insert the relevant tag at the cursor position. Once you're happy with it, press Generate Output to generate code which can then be copied for use on other websites.</p>
+                    <br>
+                    <textarea class="form-control" id="shipdataexporter_template" rows="16"></textarea>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div class="row fullwidth">
+                    <div class="col-xl-8 col-xs-12 text-left">
+                      <div class="stats">
+                        <i class="material-icons-outlined mr-2">info</i> Saving templates, "Share" features and more code formats (e.g. Markdown, HTML) are all planned to be added.
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-xs-12 text-right">
+                      <button id="shipdataexporter_generateoutput" class="btn btn-primary disabled" onclick="ait.shipDataExporter.generateOutput()">Generate Output</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -130,11 +167,12 @@
         <i class="fa fa-comments-o fa-2x"> </i>
       </a>
       <ul class="dropdown-menu">
+        <li>Created by Sharpshifter</li>
         <li class="header-title">Get in touch</li>
         <li class="button-container text-center">
           <a class="btn btn-block btn-danger" href="https://github.com/sharpshifter/ait/issues" target="_blank"><i class="fa fa-github fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;Bug Reports &amp; Requests</a>
           <br>
-          <a class="btn btn-block btn-twitter" href="https://twitter.com/sharpshifter" target="_blank"><i class="fa fa-twitter fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;My Boring Twitter</a>
+          <a class="btn btn-block btn-twitter" href="https://twitter.com/sharpshifter" target="_blank"><i class="fa fa-twitter fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sharpshifter on Twitter</a>
           <br>
         </li>
         <li class="header-title">WTF is Astrox Imperium?!</li>

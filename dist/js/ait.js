@@ -27,7 +27,9 @@
      */
     function makeBetterLabelText(str) {
         var result = '';
-        var strArr = str.split('_');
+        var strArr = str.replace('_lifesupport', '_life_support');
+        strArr = strArr.replace('ls_', 'life_support_');
+        strArr = strArr.split('_');
         for (var i = 0; i < strArr.length; i++) {
             if (i > 0) {
                 result += ' ' + toTitleCase(strArr[i]);
@@ -62,6 +64,9 @@
     var $shipdataexporter_sourcedata = $('#shipdataexporter_sourcedata');
     var $shipdataexporter_process = $('#shipdataexporter_process');
     var $shipdataexporter_sourcelabels = $('#shipdataexporter_sourcelabels');
+    var $shipdataexporter_template = $('#shipdataexporter_template');
+    var $shipdataexporter_labelsandtemplate = $('#shipdataexporter_labelsandtemplate');
+    var $shipdataexporter_generateoutput = $('#shipdataexporter_generateoutput');
 
     /**
     * Ship Info Exporter Functions
@@ -91,15 +96,17 @@
                     if (ait.shipDataExporter.currentShipDataArray.length) {
                         ait.shipDataExporter.currentShipDataArray.sort();
 
-                        $('.processarrow1').removeClass('d-none');
                         $shipdataexporter_sourcelabels.empty();
 
                         $.each(ait.shipDataExporter.currentShipDataArray, (function(idx, item) {
-                            var itemHTML = '<a href="#" class="badge badge-primary" data-itemlbl="'+ item[1]+'" data-itemval="'+ item[2]+'">' + makeBetterLabelText(item[1]) + '</a> ';
+                            var itemHTML = '<span class="badge badge-primary" data-itemtag="' + item[1] + '">' + makeBetterLabelText(item[1]) + '</span> ';
                             $shipdataexporter_sourcelabels.append(itemHTML);
                         }));
 
                         ait.showNotification("Successfully processed ship data","done","success");
+
+                        $shipdataexporter_labelsandtemplate.removeClass('d-none');
+                        $('.main-panel').scrollTop($shipdataexporter_labelsandtemplate.offset().top-50);
                     } else {
                         ait.showNotification("Unable to process source ship data","error_outline","danger");
                     }
@@ -107,6 +114,29 @@
                     ait.showNotification("The source data doesn't seem to contain any ship stats","warning","warning");
                 }
             }
+        },
+        insertTag: function(event, sender) {
+            var itemTag = $(sender).data('itemtag');
+            $(sender).removeClass('badge-primary').removeClass('badge-secondary').removeClass('badge-success').removeClass('badge-info');
+
+            if (event.shiftKey) {
+                // Insert just Name tag
+                $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*name]');
+                $(sender).addClass('badge-success');
+            } else if (event.altKey) {
+                // Insert just Value tag
+                $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*value]');
+                $(sender).addClass('badge-info');
+            } else {
+                // Insert Name and Value tag
+                // TODO: Custom separator, default to ': '
+                $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*name]: [' + itemTag + '|*value]');
+                $(sender).addClass('badge-secondary');
+            }
+        },
+        generateOutput: function() {
+            // Generate output code, populate the modal then show it (don't forget copy to clipboard button)
+            console.log('Generate Output');
         }
     }
 
@@ -117,6 +147,7 @@
      */
     $((function () {
         if ($shipdataexporter_sourcedata.length) ait.shipDataExporter.init();
+        $shipdataexporter_sourcelabels.on('click', 'span.badge', (function (e) { ait.shipDataExporter.insertTag(e, this) }));
     }));
 
 }(window.ait = window.ait || {}, jQuery));

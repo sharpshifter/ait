@@ -1,3 +1,7 @@
+body {
+    color: #8b92a9;
+}
+
 .card {
     .card-header {
         .card-title {
@@ -6,18 +10,33 @@
             }
         }
     }
-}
-
-.processarrow1 {
-    > span {
-        display: inline-block;
-        width: 100%;
-        > i {
-            font-size: 3rem;
+    .card-body {
+        > i.material-icons, > i.material-icons-outlined, > i.fa {
+            vertical-align: top;
         }
     }
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
     cursor: not-allowed;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+#shipdataexporter_sourcelabels {
+    user-select: none;
+    > span.badge {
+        cursor: pointer;
+        &:hover {
+            opacity: 0.85;
+        }
+    }
+}
+
+@media screen and (min-width: 1140px) {
+    #shipdataexporter_generateoutput {
+        margin-right: -25px;
+    }
 }
