@@ -14,7 +14,7 @@
 
 <body class="dark-edition">
   <div class="wrapper ">
-    <div class="sidebar" data-color="azure" data-background-color="black" data-image="./dist/img/sidebar-2.jpg">
+    <div class="sidebar" data-color="purple" data-background-color="black" data-image="./dist/img/sidebar-2.jpg">
       <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -73,15 +73,18 @@
           <p class="text-light">Provided with the contents of a ship data file, this tool will allow you to customise and export the data into useful formats such as BBCode, Markdown and HTML. The output can then be pasted into other websites, for example Steam discussions or Nexus Mods.</p>
           
           <div class="row">
-            <div class="col-xl-4 col-sm-12">
+            <div class="col-xl-4 col-xs-12">
               <div class="card">
                   <div class="card-header card-header-info">
                       <h4 class="card-title"><i class="material-icons-outlined mr-2">description</i> Source Ship Data</h4>
                   </div>
                 <div class="card-body">
                   <div class="form-group mt-3">
-                      <label for="shipinfoexporter_source">Paste the contents of a ship data file here:</label>
-                      <textarea class="form-control" id="shipinfoexporter_source" rows="15"></textarea>
+                      <label for="shipdataexporter_sourcedata">Paste the contents of a ship data file here:</label>
+                      <textarea class="form-control" id="shipdataexporter_sourcedata" rows="12"></textarea>
+                      <div class="mt-3 text-right">
+                        <button id="shipdataexporter_process" class="btn btn-primary disabled" onclick="ait.shipDataExporter.startProcess()">Process</button>
+                      </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -90,6 +93,13 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="col-xl-1 col-xs-12 d-none text-center processarrow1">
+              <span class="d-none d-xl-block"><i class="material-icons">keyboard_arrow_right</i></span>
+              <span class="d-xl-none"><i class="material-icons">keyboard_arrow_down</i></span>
+            </div>
+            <div class="col-xl-7 col-xs-12">
+              <div id="shipdataexporter_sourcelabels"></div>
             </div>
           </div>
 

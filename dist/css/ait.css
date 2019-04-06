@@ -10,3 +10,19 @@
 .card .card-header .card-title > i {
   vertical-align: top;
 }
+
+/* line 12, assets/scss/ait.scss */
+.processarrow1 > span {
+  display: inline-block;
+  width: 100%;
+}
+
+/* line 15, assets/scss/ait.scss */
+.processarrow1 > span > i {
+  font-size: 3rem;
+}
+
+/* line 21, assets/scss/ait.scss */
+.btn-primary.disabled, .btn-primary:disabled {
+  cursor: not-allowed;
+}

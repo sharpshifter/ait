@@ -6,6 +6,7 @@
 var settings = {
 	clean: true,
 	scripts: true,
+	lintscripts: false,
 	polyfills: false,
 	styles: true,
 	svgs: true,
@@ -197,7 +198,7 @@ var buildScripts = function (done) {
 var lintScripts = function (done) {
 
 	// Make sure this feature is activated before running
-	if (!settings.scripts) return done();
+	if (!settings.lintscripts) return done();
 
 	// Lint scripts
 	src(paths.scripts.input)

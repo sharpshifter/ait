@@ -7,3 +7,17 @@
         }
     }
 }
+
+.processarrow1 {
+    > span {
+        display: inline-block;
+        width: 100%;
+        > i {
+            font-size: 3rem;
+        }
+    }
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    cursor: not-allowed;
+}
