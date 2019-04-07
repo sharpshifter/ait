@@ -57,3 +57,103 @@ body {
         width: auto;
     }
 }
+
+.wysibb {
+    border: none;
+    background: #202940;
+
+    .wysibb-toolbar {
+        border-bottom: 1px solid rgba(221, 221, 221,0.2);
+
+        .wysibb-toolbar-container {
+            border-right: 1px dotted rgba(221, 221, 221,0.2);
+            &:last-child {
+                border-right: none;
+            }
+
+            .wysibb-toolbar-btn {
+                .fonticon {
+                    color: #eee;
+                    text-shadow: 0px 1px 0px rgba(32, 41, 64,0);
+                }
+                &:hover {
+                    border: 1px solid transparent;
+                    background: rgba(200, 242, 255, 0.2);
+                    .fonticon {
+                        color: #fff;
+                        text-shadow: 0px 1px 0px rgba(0, 9, 58, 0.3);
+                    }
+                    span.val {
+                        color: #fff;
+                    }
+                }
+                &.wbb-dropdown, &.wbb-select {
+                    &:hover {
+                        background: rgba(200, 242, 255, 0.2);
+                    }
+                    &.on, &.on:active {
+                        border: 1px solid transparent;
+                        background: rgba(200, 242, 255, 0.2);
+                        box-shadow: none;
+                    }
+                    .option:hover {
+                        background: rgba(60,60,60,0.5);
+                    }
+                }
+                span.btn-text {
+                    color: #fff;
+                }
+                &.on {
+                    span.btn-text {
+                        color: #202940;
+                    }
+                }
+                .wbb-list {
+                    border: none;
+                    box-shadow: 0px 0px 5px rgba(0,0,0,0.7);
+                    background: rgba(200, 242, 255, 0.2);
+                    color: #fff;
+
+                    :first-child {
+                        color: #eee;
+                        &:hover {
+                            color: #333;
+                        }
+                    }
+                    .sc {
+                        width: 28px;
+                        height: 23px;
+                        margin: 0 0 0px 4px;
+                        border: 1px solid transparent;
+                        &:hover {
+                            border: 1px solid #333;
+                        }
+                    }
+                }
+            }
+        }
+        .modeSwitch {
+            word-wrap: normal;
+        }
+    }
+    .wysibb-text-editor {
+        &.wysibb-body {
+            color: #fff;
+            font-size: 14px;
+
+            .spoiler {
+                border: 1px dashed rgba(255,255,255,0.5);
+                position: relative;
+                margin-top: 12px;
+
+                &:before {
+                    content: 'SPOILER';
+                    position: absolute;
+                    top: -19px;
+                    font-size: 10px;
+                    color: #aaa;
+                }
+            }
+        }
+    }
+}

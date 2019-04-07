@@ -92,7 +92,8 @@
 
             if (ait.shipDataExporter.currentShipDataString.length) {
                 // Does the data provided have SHIP_ data in it?
-                if (ait.shipDataExporter.shipInfoPattern.test(ait.shipDataExporter.currentShipDataString)) {
+                // Can't use [pattern].test([string]) here as it nudges the internal cursor once which causes .exec to skip the first result
+                if (ait.shipDataExporter.currentShipDataString.indexOf('SHIP_') !== -1) {
                     ait.shipDataExporter.currentShipDataArray = [];
 
                     // Get SHIP_ data lines and put them into an array
@@ -122,6 +123,22 @@
                         // Update page to show the labels and template editor
                         $shipdataexporter_labelsandtemplate.removeClass('d-none');
 
+                        // Create WysiBB instance
+                        // TODO: Move this into its own function when other output options such as Markdown are available, so we only initialise the editor we need
+                        var wbbOpt = {
+                            buttons: "bold,italic,underline,strike,code,spoiler,quote,|,img,video,link,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,removeFormat",
+                            allButtons: {
+                                spoiler: {
+                                  title: 'Insert spoiler',
+                                  buttonText: 'spoiler',
+                                  transform: {
+                                    '<div class="spoiler">{SELTEXT}</div>':'[spoiler]{SELTEXT}[/spoiler]'
+                                  }
+                                }
+                              }
+                        }
+                        $('#shipdataexporter_template').wysibb(wbbOpt);
+
                         // Scroll the page to where the labels are
                         $('html, body').animate({
                             scrollTop: $shipdataexporter_labelsandtemplate.offset().top-20
@@ -138,18 +155,23 @@
             var itemTag = $(sender).data('itemtag');
             $(sender).removeClass('badge-light').removeClass('badge-secondary').removeClass('badge-primary').removeClass('badge-success');
 
+            // TODO: When there's multiple formats (not just BBCode, e.g. Markdown) we need to work out which editor we're using so the correct methods can be called
+
             if (event.shiftKey) {
                 // Insert just Name tag
-                $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*name]');
+                //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
+                $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
                 $(sender).addClass('badge-success');
             } else if (event.altKey) {
                 // Insert just Value tag
-                $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*value]');
+                //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
+                $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
                 $(sender).addClass('badge-primary');
             } else {
                 // Insert Name and Value tag
                 // TODO: Custom separator, default to ': '
-                $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*name]: [' + itemTag + '|*value]');
+                //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
+                $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
                 $(sender).addClass('badge-secondary');
             }
         },
