@@ -14,7 +14,7 @@
 
 <body class="dark-edition">
   <div class="wrapper">
-    <div class="sidebar" data-color="purple" data-background-color="black" data-image="./dist/img/sidebar-2.jpg">
+    <div class="sidebar" data-color="green" data-background-color="black" data-image="./dist/img/sidebar-2.jpg">
       <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -51,13 +51,30 @@
           </button>
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="javascript:void(0)">
+              <li class="nav-item dropdown notificationsouter">
+                <a class="nav-link" href="javscript:void(0)" id="navbarNotificationsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications</i>
+                  <span class="notification">0</span>
                   <p class="d-lg-none d-md-block">
                     Notifications
                   </p>
                 </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotificationsDropdownMenuLink">
+                  <!--<a class="dropdown-item" href="javascript:void(0)">Mike John responded to your email</a>-->
+                </div>
+              </li>
+              <li class="nav-item dropdown contactouter">
+                <a class="nav-link" href="javscript:void(0)" id="navbarContactDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">chat_bubble</i>
+                  <p class="d-lg-none d-md-block">
+                    Get in touch
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarContactDropdownMenuLink">
+                  <a class="dropdown-item" href="https://twitter.com/sharpshifter" target="_blank"><i class="fa fa-twitter fa-fw fa-2x"></i>&nbsp;&nbsp;&nbsp;Created by @sharpshifter</a>
+                  <a class="dropdown-item" href="https://github.com/sharpshifter/ait/issues" target="_blank"><i class="fa fa-github fa-fw fa-2x"></i>&nbsp;&nbsp;&nbsp;Bug Reports &amp; Feature Requests</a>
+                  <a class="dropdown-item" href="http://astroximperium.com" target="_blank"><i class="fa fa-space-shuttle fa-fw fa-2x"></i>&nbsp;&nbsp;&nbsp;WTF is Astrox Imperium?!</a>
+                </div>
               </li>
               <!-- your navbar here -->
             </ul>
@@ -104,12 +121,8 @@
                     <h4 class="card-title"><i class="material-icons-outlined mr-2">label</i> Labels</h4>
                 </div>
                 <div class="card-body">
+                  <p>Click a label to insert its Name and Value tags into the template.<strong> Shift</strong>+click inserts just its Name tag.<strong> Alt</strong>+click inserts just its Value tag.</p>
                   <div id="shipdataexporter_sourcelabels"></div>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons-outlined mr-2">info</i> Click a label to insert its Name and Value tags into the template. Shift+click inserts just its Name tag. Alt+click inserts just its Value tag.
-                  </div>
                 </div>
               </div>
               <small>&nbsp;</small>
@@ -118,9 +131,8 @@
                   <h4 class="card-title"><i class="material-icons-outlined mr-2">web</i> Template Editor</h4>
                 </div>
                 <div class="card-body">
-                  <div class="form-group mt-3">
+                  <div class="form-group">
                     <p>Design your template in the editor below. Clicking a label above will insert the relevant tag at the cursor position. Once you're happy with it, press Generate Output to generate code which can then be copied for use on other websites.</p>
-                    <br>
                     <textarea class="form-control" id="shipdataexporter_template" rows="16"></textarea>
                   </div>
                 </div>
@@ -132,7 +144,7 @@
                       </div>
                     </div>
                     <div class="col-xl-4 col-xs-12 text-right">
-                      <button id="shipdataexporter_generateoutput" class="btn btn-primary disabled" onclick="ait.shipDataExporter.generateOutput()">Generate Output</button>
+                      <button id="shipdataexporter_generateoutput" class="btn btn-primary" onclick="ait.shipDataExporter.generateOutput()">Generate Output</button>
                     </div>
                   </div>
                 </div>
@@ -153,34 +165,11 @@
           </nav>
           <div class="copyright float-right text-right">
             <small class="text-muted">This site is purely fan-made and not affiliated in any way with <a href="http://astroximperium.com/" target="_blank">Astrox Imperium</a> or its developers.<br/>
-            Based on Bootstrap 4 Material Design (dark theme) template &copy; <script>document.write(new Date().getFullYear())</script> by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a></small>
+            Based on Bootstrap 4 Material Design Admin (dark theme) template &copy; <script>document.write(new Date().getFullYear())</script> by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a></small>
           </div>
           <!-- your footer here -->
         </div>
       </footer>
-    </div>
-  </div>
-  
-  <div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-      <a href="#" data-toggle="dropdown">
-        <i class="fa fa-comments-o fa-2x"> </i>
-      </a>
-      <ul class="dropdown-menu">
-        <li>Created by Sharpshifter</li>
-        <li class="header-title">Get in touch</li>
-        <li class="button-container text-center">
-          <a class="btn btn-block btn-danger" href="https://github.com/sharpshifter/ait/issues" target="_blank"><i class="fa fa-github fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;Bug Reports &amp; Requests</a>
-          <br>
-          <a class="btn btn-block btn-twitter" href="https://twitter.com/sharpshifter" target="_blank"><i class="fa fa-twitter fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sharpshifter on Twitter</a>
-          <br>
-        </li>
-        <li class="header-title">WTF is Astrox Imperium?!</li>
-        <li class="button-container text-center">
-          <a class="btn btn-block btn-info" href="http://astroximperium.com" target="_blank"><i class="fa fa-space-shuttle fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;Find out</a>
-          <br>
-        </li>
-      </ul>
     </div>
   </div>
 

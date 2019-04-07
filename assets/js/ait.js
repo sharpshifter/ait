@@ -69,6 +69,7 @@
         shipInfoPattern: new RegExp(/SHIP_([^;]+);(.*)/g),
 
         init: function () {
+            // Enable the Process button when data has been entered
             $shipdataexporter_sourcedata.on('change keyup paste', function() {
                 if ($shipdataexporter_sourcedata.val().length) {
                     $shipdataexporter_process.removeClass('disabled');
@@ -78,27 +79,45 @@
             });
         },
         startProcess: function () {
+            // Clear out previous runs
             ait.shipDataExporter.currentShipDataString = $shipdataexporter_sourcedata.val();
+
             if (ait.shipDataExporter.currentShipDataString.length) {
+                // Does the data provided have SHIP_ data in it?
                 if (ait.shipDataExporter.shipInfoPattern.test(ait.shipDataExporter.currentShipDataString)) {
                     ait.shipDataExporter.currentShipDataArray = [];
+
+                    // Get SHIP_ data lines and put them into an array
                     var match;
                     while((match = ait.shipDataExporter.shipInfoPattern.exec(ait.shipDataExporter.currentShipDataString)) != null) ait.shipDataExporter.currentShipDataArray.push(match);
                     
                     if (ait.shipDataExporter.currentShipDataArray.length) {
+                        // Sort the array alphabetically
                         ait.shipDataExporter.currentShipDataArray.sort();
 
+                        // Clear out previous labels
                         $shipdataexporter_sourcelabels.empty();
 
+                        // Make a label for every ship data item
                         $.each(ait.shipDataExporter.currentShipDataArray, function(idx, item) {
-                            var itemHTML = '<span class="badge badge-primary" data-itemtag="' + item[1] + '">' + makeBetterLabelText(item[1]) + '</span> ';
+                            /* The array indices are
+                            0 = The full match, e.g. SHIP_base_thrust;242
+                            1 = Ship data key ("SHIP_" is stripped), e.g. base_thrust
+                            2 = Ship data value, e.g. 242 or in the case of array values like engine colour, 0.0;0.69;1.0;0.85
+                            */
+                            var itemHTML = '<span class="badge badge-light" data-itemtag="' + item[1] + '">' + makeBetterLabelText(item[1]) + '</span> ';
                             $shipdataexporter_sourcelabels.append(itemHTML);
                         });
 
                         ait.showNotification("Successfully processed ship data","done","success");
 
+                        // Update page to show the labels and template editor
                         $shipdataexporter_labelsandtemplate.removeClass('d-none');
-                        $('.main-panel').scrollTop($shipdataexporter_labelsandtemplate.offset().top-50);
+
+                        // Scroll the page to where the labels are
+                        $('html, body').animate({
+                            scrollTop: $shipdataexporter_labelsandtemplate.offset().top-20
+                        }, 350);
                     } else {
                         ait.showNotification("Unable to process source ship data","error_outline","danger");
                     }
@@ -109,7 +128,7 @@
         },
         insertTag: function(event, sender) {
             var itemTag = $(sender).data('itemtag');
-            $(sender).removeClass('badge-primary').removeClass('badge-secondary').removeClass('badge-success').removeClass('badge-info');
+            $(sender).removeClass('badge-light').removeClass('badge-secondary').removeClass('badge-primary').removeClass('badge-success');
 
             if (event.shiftKey) {
                 // Insert just Name tag
@@ -118,7 +137,7 @@
             } else if (event.altKey) {
                 // Insert just Value tag
                 $shipdataexporter_template.val($shipdataexporter_template.val() + '[' + itemTag + '|*value]');
-                $(sender).addClass('badge-info');
+                $(sender).addClass('badge-primary');
             } else {
                 // Insert Name and Value tag
                 // TODO: Custom separator, default to ': '

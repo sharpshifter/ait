@@ -22,7 +22,7 @@
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
  */
-
+/*
 (function() {
   isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 
@@ -35,7 +35,7 @@
     $('html').addClass('perfect-scrollbar-off');
   }
 })();
-
+*/
 
 var breakCards = true;
 
