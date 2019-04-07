@@ -202,13 +202,23 @@ body {
 }
 
 /* line 144, assets/scss/ait.scss */
+.wysibb .wysibb-text-editor.wysibb-body b, .wysibb .wysibb-text-editor.wysibb-body strong {
+  font-weight: 700;
+}
+
+/* line 147, assets/scss/ait.scss */
+.wysibb .wysibb-text-editor.wysibb-body a {
+  text-decoration: underline;
+}
+
+/* line 150, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body .spoiler {
   border: 1px dashed rgba(255, 255, 255, 0.5);
   position: relative;
   margin-top: 12px;
 }
 
-/* line 149, assets/scss/ait.scss */
+/* line 155, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body .spoiler:before {
   content: 'SPOILER';
   position: absolute;
