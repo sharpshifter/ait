@@ -9,13 +9,18 @@ body {
 .card {
     .card-header {
         .card-title {
-            > i {
+            i.material-icons, i.material-icons-outlined, i.fa {
                 vertical-align: top;
             }
         }
     }
     .card-body {
-        > i.material-icons, > i.material-icons-outlined, > i.fa {
+        i.material-icons, i.material-icons-outlined, i.fa {
+            vertical-align: middle;
+        }
+    }
+    .card-footer {
+        i.material-icons, i.material-icons-outlined, i.fa {
             vertical-align: top;
         }
     }
@@ -185,11 +190,15 @@ body {
 }
 
 .modal-header {
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+
+    .close {
+        color: #fff;
+    }
 }
 .modal-content {
     background-color: #202940;
 }
-.modal-top {
+.modal-footer {
     border-top: 1px solid transparent;
 }

@@ -15,7 +15,7 @@
               title: 'Insert horizontal rule/line',
               buttonText: 'line',
               transform: {
-                '{SELTEXT}<hr>':'{SELTEXT}[line]'
+                '{SELTEXT}\n<hr>':'{SELTEXT}\n[line]'
               }
             }
         },
@@ -64,7 +64,8 @@
             message: message
         }, {
             type: type,
-            timer: 2000,
+            delay: 3500,
+            timer: 1000,
             placement: {
                 from: 'top',
                 align: 'center'
@@ -92,10 +93,14 @@
     * Ship Info Exporter Functions
      */
     ait.shipDataExporter = {
+        // editorType will be determined by the output option chosen by the user (when the other formats/editors are implemented)
+        editorType: 'wysibb',
         wysibbInBBCodeMode: false,
+        templateTagsSeparator: ': ',
         currentShipDataString: '',
         currentShipDataArray: [{}],
-        shipInfoPattern: new RegExp(/SHIP_([^;]+);(.*)/g),
+        shipInfoInputPattern: new RegExp(/SHIP_([^;]+);(.*)/g),
+        shipInfoOutputPattern: new RegExp(/{([^\|\*]+)\|\*(\w+)}/g),
 
         init: function () {
             // Enable the Process button when data has been entered
@@ -132,7 +137,7 @@
 
                     // Get SHIP_ data lines and put them into an array
                     var match;
-                    while((match = ait.shipDataExporter.shipInfoPattern.exec(ait.shipDataExporter.currentShipDataString)) != null) ait.shipDataExporter.currentShipDataArray.push(match);
+                    while((match = ait.shipDataExporter.shipInfoInputPattern.exec(ait.shipDataExporter.currentShipDataString)) != null) ait.shipDataExporter.currentShipDataArray.push(match);
                     
                     if (ait.shipDataExporter.currentShipDataArray.length) {
                         // Sort the array alphabetically
@@ -160,6 +165,7 @@
 
                         // Create WysiBB instance
                         // TODO: Move this into its own function when other output options such as Markdown are available, so we only initialise the editor we need
+                        // And Note: WysiBB doesn't get .destroy()ed properly, so when other output options are available, we'll need to ask which format the user wants BEFORE any editors are created
                         $shipdataexporter_template.wysibb(wbbOpt);
 
                         // Scroll the page to where the labels are
@@ -193,9 +199,9 @@
                     $(sender).addClass('badge-primary');
                 } else {
                     // Insert Name and Value tag
-                    // TODO: Custom separator, default to ': '
-                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
-                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
+                    // TODO: Field on page to set custom separator, default is ': '
+                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}' + ait.shipDataExporter.templateTagsSeparator + '{' + itemTag + '|*value}');
+                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}' + ait.shipDataExporter.templateTagsSeparator + '{' + itemTag + '|*value}');
                     $(sender).addClass('badge-secondary');
                 }
             }
@@ -217,45 +223,102 @@
                 '[img]https://via.placeholder.com/550x400.png?text=Ship+Image+Here[/img]\n' +
                 '\n' +
                 '[b][size=3]Primary Ship Details[/size][/b]\n' +
-                '{type|*name}: {type|*value}\n' +
-                '{class|*name}: {class|*value}\n' +
-                '{manufacturer|*name}: {manufacturer|*value}\n' +
-                '{active_slots|*name}: {active_slots|*value}\n' +
-                '{passive_slots|*name}: {passive_slots|*value}\n' +
-                '{base_price|*name}: {base_price|*value}\n' +
+                '{type|*name}' + ait.shipDataExporter.templateTagsSeparator + '{type|*value}\n' +
+                '{class|*name}' + ait.shipDataExporter.templateTagsSeparator + '{class|*value}\n' +
+                '{manufacturer|*name}' + ait.shipDataExporter.templateTagsSeparator + '{manufacturer|*value}\n' +
+                '{active_slots|*name}' + ait.shipDataExporter.templateTagsSeparator + '{active_slots|*value}\n' +
+                '{passive_slots|*name}' + ait.shipDataExporter.templateTagsSeparator + '{passive_slots|*value}\n' +
+                '{base_price|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_price|*value}\n' +
                 '\n' +
                 '[b][size=3]Base Attributes[/size][/b]\n' +
-                '{base_shield|*name}: {base_shield|*value}\n' +
-                '{base_energy|*name}: {base_energy|*value}\n' +
-                '{impact_resistance|*name}: {impact_resistance|*value}\n' +
-                '{energy_resistance|*name}: {energy_resistance|*value}\n' +
-                '{explosive_resistance|*name}: {explosive_resistance|*value}\n' +
+                '{base_shield|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_shield|*value}\n' +
+                '{base_energy|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_energy|*value}\n' +
+                '{impact_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{impact_resistance|*value}\n' +
+                '{energy_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{energy_resistance|*value}\n' +
+                '{explosive_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{explosive_resistance|*value}\n' +
                 '\n' +
-                '{base_engine_burn|*name}: {base_engine_burn|*value}\n' +
-                '{base_recharge|*name}: {base_recharge|*value}\n' +
-                '{base_turn|*name}: {base_turn|*value}\n' +
-                '{base_thrust|*name}: {base_thrust|*value}\n' +
-                '{base_mass|*name}: {base_mass|*value}\n' +
+                '{base_engine_burn|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_engine_burn|*value}\n' +
+                '{base_recharge|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_recharge|*value}\n' +
+                '{base_turn|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_turn|*value}\n' +
+                '{base_thrust|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_thrust|*value}\n' +
+                '{base_mass|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_mass|*value}\n' +
                 '\n' +
-                '{base_cargo|*name}: {base_cargo|*value}\n' +
-                '{base_lifesupport|*name}: {base_lifesupport|*value}\n' +
+                '{base_cargo|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_cargo|*value}\n' +
+                '{base_lifesupport|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_lifesupport|*value}\n' +
                 '\n' +
-                '{base_scan_speed|*name}: {base_scan_speed|*value}\n' +
-                '{base_scan_max_targets|*name}: {base_scan_max_targets|*value}\n' +
-                '{base_scan_pulserange|*name}: {base_scan_pulserange|*value}\n' +
-                '{base_scan_pulsespeed|*name}: {base_scan_pulsespeed|*value}\n';
+                '{base_scan_speed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_speed|*value}\n' +
+                '{base_scan_max_targets|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_max_targets|*value}\n' +
+                '{base_scan_pulserange|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulserange|*value}\n' +
+                '{base_scan_pulsespeed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulsespeed|*value}\n';
 
+                // Note: WysiBB doesn't get .destroy()ed properly, so when other output options are available, we'll need to ask which format the user wants BEFORE any editors are created
                 $shipdataexporter_template.bbcode(defaultTemplate);
                 $shipdataexporter_template.val(defaultTemplate);
                 $shipdataexporter_template.sync();
             } else {
-                alert('Switch the editor to BBCode mode first');
+                ait.showNotification("Please switch the editor to BBCode mode first","warning","warning");
             }
         },
         generateOutput: function() {
-            // Generate output code, populate the modal then show it (don't forget copy to clipboard button)
-            $shipdataexporter_outputarea.val($shipdataexporter_template.bbcode());
+            // Generate output code (when multiple formats are up, could do if statement to call the editor's specific "get source code" function), in WysiBB's case its .bbcode())
+            var editorOutput = ait.shipDataExporter.getEditorOutput();
+            var matches = [];
+            var match;
+            
+            // Get tags from the editor output and put them into an array
+            while((match = ait.shipDataExporter.shipInfoOutputPattern.exec(editorOutput)) != null) {
+                matches.push(match);
+            }
+
+            // Iterate each tag
+            $.each(matches, function(idx, match) {
+                var tagMakeup = '{' + match[1] + '|*' + match[2] + '}';
+
+                /* The matching tag indices are
+                0 = The full match, e.g. {base_thrust|*name}
+                1 = Output data key, e.g. base_thrust
+                2 = Output data type, e.g. name
+                */
+                
+                // Now find the corresponding data from the Ship Data Array
+                // It's basically picking out the ship data item that has the same value in its "key" column as the current tag's "key" column. e.g. base_lifesupport
+                var resultArray = ait.shipDataExporter.currentShipDataArray.find(x => x[1] === match[1]);
+
+                if (resultArray != undefined) {
+                    if (match[2] == 'name') {
+                        // This template tag wants its name, e.g. Base Life Support
+                        editorOutput = editorOutput.replace(tagMakeup, makeBetterLabelText(resultArray[1]));
+                    } else if (match[2] == 'value') {
+                        // This template tag wants its value, e.g. 480
+                        editorOutput = editorOutput.replace(tagMakeup, resultArray[2]);
+                    }
+                } else {
+                    // Somehow, there is no matching key in the ship data, so just remove this tag from the template
+                    // Catch any tags followed by the separator
+                    // TODO: Field on page to set the custom separator, default is ': '
+                    editorOutput = editorOutput.replace(tagMakeup + ait.shipDataExporter.templateTagsSeparator, '');
+                    // Catch any tags followed by a new line
+                    editorOutput = editorOutput.replace(tagMakeup + '\n', '');
+                    // And just in case there is only one line or it's the last tag..
+                    editorOutput = editorOutput.replace(tagMakeup, '');
+                }
+            });
+
+            $shipdataexporter_outputarea.val(editorOutput);
             $modal_shipdataexporter_output.modal('show');
+        },
+        getEditorOutput: function() {
+            var editorOutput;
+
+            switch (ait.shipDataExporter.editorType) {
+                case 'wysibb':
+                    editorOutput = $shipdataexporter_template.bbcode();
+                    break;
+                default:
+                    editorOutput = "Editor not set!";
+            }
+
+            return editorOutput;
         }
     }
 

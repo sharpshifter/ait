@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-52504374-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-52504374-1');
+  </script>
+
   <title>Astrox Imperium Tools</title>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
@@ -125,6 +135,7 @@
                 <div class="card-body">
                   <p>Click a label to insert its Name and Value tags into the template at the cursor position.<strong> Shift</strong>+click inserts just its Name tag.<strong> Alt</strong>+click inserts just its Value tag.</p>
                   <button id="shipdataexporter_usedefaulttemplate" class="btn btn-primary mb-3" onclick="ait.shipDataExporter.useDefaultTemplate()">Use Default Template</button>
+                  <small class="ml-2 text-warning"><i class="material-icons">warning</i> Note: this will remove any changes you have made in the template editor!</small>
                   <div id="shipdataexporter_modewarning" class="border border-danger text-light text-center">Due to bugs with the editor, label insertion has been disabled while it is in BBCode mode. Switch back to normal mode to be able to insert labels again.</div>
                   <div id="shipdataexporter_sourcelabels" class="mb-3"></div>
                   <div class="form-group">
@@ -180,7 +191,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <textarea id="shipdataexporter_outputarea" class="form-control" rows="30"></textarea>
+          <textarea id="shipdataexporter_outputarea" class="form-control" rows="20"></textarea>
         </div>
         <div class="modal-footer">
           <button id="shipdataexporter_copytoclipboard" type="button" class="btn btn-primary" data-clipboard-target="#shipdataexporter_outputarea">Copy to Clipboard</button>
@@ -196,8 +207,6 @@
   <script src="./dist/js/default-passive-events.js"></script>
   <script src="./dist/js/buttons.js"></script>
   <script src="./dist/js/plugins.js"></script>
-  <!-- Google Maps Plugin -->
-  <!--<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>-->
   <script src="./dist/editors/wysibb/jquery.wysibb.min.js"></script>
   <script src="./dist/js/material-dashboard.js"></script>
   <script src="./dist/js/main.js"></script>
