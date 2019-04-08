@@ -101,6 +101,7 @@
         currentShipDataArray: [{}],
         shipInfoInputPattern: new RegExp(/SHIP_([^;]+);(.*)/g),
         shipInfoOutputPattern: new RegExp(/{([^\|\*]+)\|\*(\w+)}/g),
+        tagWatcherInterval: null,
 
         init: function () {
             // Enable the Process button when data has been entered
@@ -163,15 +164,26 @@
                         // Update page to show the labels and template editor
                         $shipdataexporter_labelsandtemplate.removeClass('d-none');
 
-                        // Create WysiBB instance
+                        // Create editor instance
                         // TODO: Move this into its own function when other output options such as Markdown are available, so we only initialise the editor we need
                         // And Note: WysiBB doesn't get .destroy()ed properly, so when other output options are available, we'll need to ask which format the user wants BEFORE any editors are created
-                        $shipdataexporter_template.wysibb(wbbOpt);
+                        switch (ait.shipDataExporter.editorType) {
+                            case 'wysibb':
+                                $shipdataexporter_template.wysibb(wbbOpt);
+                                break;
+                            default:
+                                ait.showNotification("Please choose a template format first!","error_outline","danger");
+                        }
 
                         // Scroll the page to where the labels are
                         $('html, body').animate({
                             scrollTop: $shipdataexporter_labelsandtemplate.offset().top-20
                         }, 350);
+
+                        // Start the tag watcher if it hasn't already been started
+                        if (ait.shipDataExporter.tagWatcherInterval == null) {
+                            ait.shipDataExporter.tagWatcherInterval = setInterval(ait.shipDataExporter.initTagWatcher, 500);
+                        }
                     } else {
                         ait.showNotification("Unable to process source ship data","error_outline","danger");
                     }
@@ -180,29 +192,77 @@
                 }
             }
         },
+        initTagWatcher: function() {
+            var editorOutput = ait.shipDataExporter.getEditorOutput();
+            
+            // Iterate over each tag label 
+            $('span.badge[data-itemtag]').each(function() {
+                // Reset the tag label classes
+                $(this).removeClass('badge-light').removeClass('badge-secondary').removeClass('badge-primary').removeClass('badge-success');
+
+                var tagName = $(this).data('itemtag');
+                var templateContainsName = false;
+                var templateContainsValue = false;
+
+                // Does this tag exist in the template, asking for a Name or Value?
+                if (editorOutput.indexOf('{' + tagName + '|*name}') != -1) templateContainsName = true;
+                if (editorOutput.indexOf('{' + tagName + '|*value}') != -1) templateContainsValue = true;
+
+                if (templateContainsName && templateContainsValue) {
+                    // The template wants both Name and Value for this tag
+                    $(this).addClass('badge-secondary');
+                } else if (templateContainsName) {
+                    // The template wants just Name for this tag
+                    $(this).addClass('badge-primary');
+                } else if (templateContainsValue) {
+                    // The template wants just Value for this tag
+                    $(this).addClass('badge-success');
+                } else {
+                    // This tag is not in the template
+                    $(this).addClass('badge-light');
+                }
+            });
+        },
         insertTag: function(event, sender) {
             if (!$shipdataexporter_sourcelabels.find('#shipdataexporter_modewarning').is(':visible')) {
                 var itemTag = $(sender).data('itemtag');
-                $(sender).removeClass('badge-light').removeClass('badge-secondary').removeClass('badge-primary').removeClass('badge-success');
 
-                // TODO: When there's multiple formats (not just BBCode, e.g. Markdown) we need to work out which editor we're using so the correct methods can be called
+                // The switches are here for when there's multiple formats (not just BBCode, e.g. Markdown, HTML) as we need to know which editor we're using so the correct methods are called
 
                 if (event.shiftKey) {
                     // Insert just Name tag
-                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
-                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
-                    $(sender).addClass('badge-success');
+                    switch (ait.shipDataExporter.editorType) {
+                        case 'wysibb':
+                            $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
+                            break;
+                        default:
+                            $shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
+                    }
+                    
+                    //$(sender).addClass('badge-success');
                 } else if (event.altKey) {
                     // Insert just Value tag
-                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
-                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
-                    $(sender).addClass('badge-primary');
+                    switch (ait.shipDataExporter.editorType) {
+                        case 'wysibb':
+                            $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
+                            break;
+                        default:
+                            $shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
+                    }
+
+                    //$(sender).addClass('badge-primary');
                 } else {
                     // Insert Name and Value tag
                     // TODO: Field on page to set custom separator, default is ': '
-                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}' + ait.shipDataExporter.templateTagsSeparator + '{' + itemTag + '|*value}');
-                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}' + ait.shipDataExporter.templateTagsSeparator + '{' + itemTag + '|*value}');
-                    $(sender).addClass('badge-secondary');
+                    switch (ait.shipDataExporter.editorType) {
+                        case 'wysibb':
+                            $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}' + ait.shipDataExporter.templateTagsSeparator + '{' + itemTag + '|*value}');
+                            break;
+                        default:
+                            $shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}' + ait.shipDataExporter.templateTagsSeparator + '{' + itemTag + '|*value}');
+                    }
+
+                    //$(sender).addClass('badge-secondary');
                 }
             }
         },
@@ -217,46 +277,52 @@
             }
         },
         useDefaultTemplate: function() {
-            if (ait.shipDataExporter.wysibbInBBCodeMode) {
-                var defaultTemplate = '[b][size=3]{name|*value}[/size][/b]\n' +
-                '\n' +
-                '[img]https://via.placeholder.com/550x400.png?text=Ship+Image+Here[/img]\n' +
-                '\n' +
-                '[b][size=3]Primary Ship Details[/size][/b]\n' +
-                '{type|*name}' + ait.shipDataExporter.templateTagsSeparator + '{type|*value}\n' +
-                '{class|*name}' + ait.shipDataExporter.templateTagsSeparator + '{class|*value}\n' +
-                '{manufacturer|*name}' + ait.shipDataExporter.templateTagsSeparator + '{manufacturer|*value}\n' +
-                '{active_slots|*name}' + ait.shipDataExporter.templateTagsSeparator + '{active_slots|*value}\n' +
-                '{passive_slots|*name}' + ait.shipDataExporter.templateTagsSeparator + '{passive_slots|*value}\n' +
-                '{base_price|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_price|*value}\n' +
-                '\n' +
-                '[b][size=3]Base Attributes[/size][/b]\n' +
-                '{base_shield|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_shield|*value}\n' +
-                '{base_energy|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_energy|*value}\n' +
-                '{impact_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{impact_resistance|*value}\n' +
-                '{energy_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{energy_resistance|*value}\n' +
-                '{explosive_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{explosive_resistance|*value}\n' +
-                '\n' +
-                '{base_engine_burn|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_engine_burn|*value}\n' +
-                '{base_recharge|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_recharge|*value}\n' +
-                '{base_turn|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_turn|*value}\n' +
-                '{base_thrust|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_thrust|*value}\n' +
-                '{base_mass|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_mass|*value}\n' +
-                '\n' +
-                '{base_cargo|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_cargo|*value}\n' +
-                '{base_lifesupport|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_lifesupport|*value}\n' +
-                '\n' +
-                '{base_scan_speed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_speed|*value}\n' +
-                '{base_scan_max_targets|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_max_targets|*value}\n' +
-                '{base_scan_pulserange|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulserange|*value}\n' +
-                '{base_scan_pulsespeed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulsespeed|*value}\n';
+            switch (ait.shipDataExporter.editorType) {
+                case 'wysibb':
+                    if (ait.shipDataExporter.wysibbInBBCodeMode) {
+                        var defaultTemplate = '[b][size=3]{name|*value}[/size][/b]\n' +
+                        '\n' +
+                        '[img]https://via.placeholder.com/600x400.png?text=Placeholder+image+-+click+and+change+via+Image+icon[/img]\n' +
+                        '\n' +
+                        '[b][size=3]Primary Ship Details[/size][/b]\n' +
+                        '{type|*name}' + ait.shipDataExporter.templateTagsSeparator + '{type|*value}\n' +
+                        '{class|*name}' + ait.shipDataExporter.templateTagsSeparator + '{class|*value}\n' +
+                        '{manufacturer|*name}' + ait.shipDataExporter.templateTagsSeparator + '{manufacturer|*value}\n' +
+                        '{active_slots|*name}' + ait.shipDataExporter.templateTagsSeparator + '{active_slots|*value}\n' +
+                        '{passive_slots|*name}' + ait.shipDataExporter.templateTagsSeparator + '{passive_slots|*value}\n' +
+                        '{base_price|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_price|*value}\n' +
+                        '\n' +
+                        '[b][size=3]Base Attributes[/size][/b]\n' +
+                        '{base_shield|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_shield|*value}\n' +
+                        '{base_energy|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_energy|*value}\n' +
+                        '{impact_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{impact_resistance|*value}\n' +
+                        '{energy_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{energy_resistance|*value}\n' +
+                        '{explosive_resistance|*name}' + ait.shipDataExporter.templateTagsSeparator + '{explosive_resistance|*value}\n' +
+                        '\n' +
+                        '{base_engine_burn|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_engine_burn|*value}\n' +
+                        '{base_recharge|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_recharge|*value}\n' +
+                        '{base_turn|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_turn|*value}\n' +
+                        '{base_thrust|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_thrust|*value}\n' +
+                        '{base_mass|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_mass|*value}\n' +
+                        '\n' +
+                        '{base_cargo|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_cargo|*value}\n' +
+                        '{base_lifesupport|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_lifesupport|*value}\n' +
+                        '\n' +
+                        '{base_scan_speed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_speed|*value}\n' +
+                        '{base_scan_max_targets|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_max_targets|*value}\n' +
+                        '{base_scan_pulserange|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulserange|*value}\n' +
+                        '{base_scan_pulsespeed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulsespeed|*value}\n';
 
-                // Note: WysiBB doesn't get .destroy()ed properly, so when other output options are available, we'll need to ask which format the user wants BEFORE any editors are created
-                $shipdataexporter_template.bbcode(defaultTemplate);
-                $shipdataexporter_template.val(defaultTemplate);
-                $shipdataexporter_template.sync();
-            } else {
-                ait.showNotification("Please switch the editor to BBCode mode first","warning","warning");
+                        // Note: WysiBB doesn't get .destroy()ed properly, so when other output options are available, we'll need to ask which format the user wants BEFORE any editors are created
+                        $shipdataexporter_template.bbcode(defaultTemplate);
+                        $shipdataexporter_template.val(defaultTemplate);
+                        $shipdataexporter_template.sync();
+                    } else {
+                        ait.showNotification("Please switch the editor to BBCode mode first","warning","warning");
+                    }
+                    break;
+                default:
+                    $shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
             }
         },
         generateOutput: function() {

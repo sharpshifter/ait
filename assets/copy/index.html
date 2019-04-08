@@ -98,14 +98,14 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-12 col-xs-12">
-              <p class="text-light">Welcome to a collection of various tools to do various things relating to the game Astrox Imperium. Well it's not really a collection at the moment as there is only one tool (displayed below), but more should appear over time and be accessible via the side navigation.</p>
+              <p class="text-light">Welcome to a collection of various tools to do various things relating to the game Astrox Imperium. Well it's not really a collection at the moment as there is only one tool (displayed below), but more should appear over time and be accessible via the side navigation. For the security conscious, rest assured everything is processed via client-side only JavaScript - the data you enter here is not sent to any servers (except Google Analytics but it's easy to block if you wish).</p>
             </div>
           </div>
-          <hr>
+          <hr class="mt-1 mb-1">
           <div id="shipdataexporter" class="row">
             <div class="col-xl-4 col-xs-12">
-              <h3>Ship Info Exporter</h3>
-              <p>Provided with the contents of a ship data file, this tool will allow you to customise and export the data into useful formats such as BBCode, Markdown (eventually) and HTML (also eventually). The output can then be pasted into other websites, for example Steam discussions or Nexus Mods.</p>
+              <h3><i class="fa fa-rocket fa-fw mr-1"></i> Ship Info Exporter</h3>
+              <p>Provided with the contents of a ship data file, this tool will allow you to customise and export the data into useful formats such as BBCode, Markdown (eventually) and HTML (also eventually). The output can then be pasted into other websites, for example <a href="https://steamcommunity.com/app/954870/discussions/" target="_blank">Steam discussions</a> or <a href="https://www.nexusmods.com/astroximperium" target="_blank">Nexus Mods</a>.</p>
               <br>
               <div class="card">
                   <div class="card-header card-header-info">
@@ -134,14 +134,14 @@
                 </div>
                 <div class="card-body">
                   <button id="shipdataexporter_usedefaulttemplate" class="btn btn-primary mb-3" onclick="ait.shipDataExporter.useDefaultTemplate()">Use Default Template</button>
-                  <small class="ml-2 text-warning"><i class="material-icons">warning</i> Note: this will remove any changes you have made in the template editor!</small>
+                  <small class="usedefaulttemplatewarning ml-2 text-warning"><i class="material-icons">warning</i> Note: this will remove any changes you have made in the template editor!</small>
                   <hr class="mt-1 mb-2">
-                  <p>Click a label to insert its Name and Value tags into the template at the cursor position.<strong> Shift</strong>+click inserts just its Name tag.<strong> Alt</strong>+click inserts just its Value tag.</p>
+                  <p>Click a label to insert its <strong class="tagcolourboth">Name and Value</strong> tags into the template at the cursor position.<strong> Shift</strong>+click inserts just its <strong class="tagcolourname">Name</strong> tag.<strong> Alt</strong>+click inserts just its <strong class="tagcolourvalue">Value</strong> tag.</p>
                   <div id="shipdataexporter_modewarning" class="border border-danger text-light text-center">Due to bugs with the editor, label insertion has been disabled while it is in BBCode mode. Switch back to normal mode to be able to insert labels again.</div>
                   <div id="shipdataexporter_sourcelabels" class="mb-3"></div>
                   <div class="form-group">
                     <textarea class="form-control" id="shipdataexporter_template" rows="16"></textarea>
-                    <p>Once you're happy with the template, press Generate Output to generate code that can be copied to other websites.</p>
+                    <p class="mt-2">Once you're happy with the template, press Generate Output to generate code that can be copied to other websites.</p>
                   </div>
                 </div>
                 <div class="card-footer">

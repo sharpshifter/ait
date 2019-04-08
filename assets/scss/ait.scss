@@ -34,6 +34,22 @@ body {
     width: 100%;
 }
 
+.usedefaulttemplatewarning {
+    position: relative;
+    top: -5px;
+}
+
+.tagcolourboth {
+    color: #6c757d;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+}
+.tagcolourname {
+    color: #2196f3;
+}
+.tagcolourvalue {
+    color: #4caf50;
+}
+
 #shipdataexporter_sourcelabels {
     max-height: 110px;
     overflow-y: auto;
@@ -64,9 +80,11 @@ body {
     border-radius: 3px;
     display: none;
     height: 100%;
-    padding-top: 3.3%;
     position: absolute;
     width: 100%;
+    @media screen and (min-width: 992px) {
+        padding-top: 3.3%;
+    }
 }
 
 #shipdataexporter_generateoutput {
