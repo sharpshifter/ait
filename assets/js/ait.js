@@ -1,5 +1,28 @@
 (function (ait, $, undefined) {
 
+    // Local vars
+    var wbbOpt = {
+        buttons: "bold,italic,underline,strike,code,spoiler,line,quote,|,img,video,link,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,removeFormat",
+        allButtons: {
+            spoiler: {
+              title: 'Insert spoiler',
+              buttonText: 'spoiler',
+              transform: {
+                '<div class="spoiler">{SELTEXT}</div>':'[spoiler]{SELTEXT}[/spoiler]'
+              }
+            },
+            line: {
+              title: 'Insert horizontal rule/line',
+              buttonText: 'line',
+              transform: {
+                '{SELTEXT}<hr>':'{SELTEXT}[line]'
+              }
+            }
+        },
+        autoresize: false,
+        resize_maxheight: 400
+    }
+
     // Utility Functions
 
     /**
@@ -58,12 +81,18 @@
     var $shipdataexporter_sourcelabels = $('#shipdataexporter_sourcelabels');
     var $shipdataexporter_template = $('#shipdataexporter_template');
     var $shipdataexporter_labelsandtemplate = $('#shipdataexporter_labelsandtemplate');
+    var $shipdataexporter_usedefaulttemplatelabels = $('#shipdataexporter_usedefaulttemplatelabels');
+    var $shipdataexporter_modewarning = $('#shipdataexporter_modewarning');
     var $shipdataexporter_generateoutput = $('#shipdataexporter_generateoutput');
+    var $modal_shipdataexporter_output = $('#modal_shipdataexporter_output');
+    var $shipdataexporter_outputarea = $('#shipdataexporter_outputarea');
+    var $shipdataexporter_copytoclipboard = $('#shipdataexporter_copytoclipboard');
 
     /**
     * Ship Info Exporter Functions
      */
     ait.shipDataExporter = {
+        wysibbInBBCodeMode: false,
         currentShipDataString: '',
         currentShipDataArray: [{}],
         shipInfoPattern: new RegExp(/SHIP_([^;]+);(.*)/g),
@@ -77,6 +106,19 @@
                     $shipdataexporter_process.addClass('disabled');
                 }
             });
+
+            // Set up clipboard on the Generate button
+            if ($shipdataexporter_copytoclipboard.length) {
+                var clipboard = new ClipboardJS($shipdataexporter_copytoclipboard[0]);
+
+                clipboard.on('success', function(e) {
+                    ait.showNotification("Successfully copied code to clipboard!","done","success");
+                });
+
+                clipboard.on('error', function(e) {
+                    ait.showNotification("Unable to copy code to clipboard","error_outline","danger");
+                });
+            }
         },
         startProcess: function () {
             // Clear out previous runs
@@ -98,6 +140,7 @@
 
                         // Clear out previous labels
                         $shipdataexporter_sourcelabels.empty();
+                        $shipdataexporter_sourcelabels.append($shipdataexporter_modewarning);
 
                         // Make a label for every ship data item
                         $.each(ait.shipDataExporter.currentShipDataArray, function(idx, item) {
@@ -117,19 +160,7 @@
 
                         // Create WysiBB instance
                         // TODO: Move this into its own function when other output options such as Markdown are available, so we only initialise the editor we need
-                        var wbbOpt = {
-                            buttons: "bold,italic,underline,strike,code,spoiler,quote,|,img,video,link,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,removeFormat",
-                            allButtons: {
-                                spoiler: {
-                                  title: 'Insert spoiler',
-                                  buttonText: 'spoiler',
-                                  transform: {
-                                    '<div class="spoiler">{SELTEXT}</div>':'[spoiler]{SELTEXT}[/spoiler]'
-                                  }
-                                }
-                              }
-                        }
-                        $('#shipdataexporter_template').wysibb(wbbOpt);
+                        $shipdataexporter_template.wysibb(wbbOpt);
 
                         // Scroll the page to where the labels are
                         $('html, body').animate({
@@ -144,32 +175,87 @@
             }
         },
         insertTag: function(event, sender) {
-            var itemTag = $(sender).data('itemtag');
-            $(sender).removeClass('badge-light').removeClass('badge-secondary').removeClass('badge-primary').removeClass('badge-success');
+            if (!$shipdataexporter_sourcelabels.find('#shipdataexporter_modewarning').is(':visible')) {
+                var itemTag = $(sender).data('itemtag');
+                $(sender).removeClass('badge-light').removeClass('badge-secondary').removeClass('badge-primary').removeClass('badge-success');
 
-            // TODO: When there's multiple formats (not just BBCode, e.g. Markdown) we need to work out which editor we're using so the correct methods can be called
+                // TODO: When there's multiple formats (not just BBCode, e.g. Markdown) we need to work out which editor we're using so the correct methods can be called
 
-            if (event.shiftKey) {
-                // Insert just Name tag
-                //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
-                $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
-                $(sender).addClass('badge-success');
-            } else if (event.altKey) {
-                // Insert just Value tag
-                //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
-                $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
-                $(sender).addClass('badge-primary');
+                if (event.shiftKey) {
+                    // Insert just Name tag
+                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
+                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}');
+                    $(sender).addClass('badge-success');
+                } else if (event.altKey) {
+                    // Insert just Value tag
+                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
+                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*value}');
+                    $(sender).addClass('badge-primary');
+                } else {
+                    // Insert Name and Value tag
+                    // TODO: Custom separator, default to ': '
+                    //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
+                    $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
+                    $(sender).addClass('badge-secondary');
+                }
+            }
+        },
+        doWysibbMode: function(modestatus) {
+            ait.shipDataExporter.wysibbInBBCodeMode = modestatus;
+            if(modestatus) {
+                // Editor is now in BBCode mode, show warning over labels
+                $shipdataexporter_sourcelabels.addClass('blurred').find('#shipdataexporter_modewarning').show();
             } else {
-                // Insert Name and Value tag
-                // TODO: Custom separator, default to ': '
-                //$shipdataexporter_template.val($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
-                $shipdataexporter_template.insertAtCursor($shipdataexporter_template.val() + '{' + itemTag + '|*name}: {' + itemTag + '|*value}');
-                $(sender).addClass('badge-secondary');
+                // Editor has now left BBCode mode, hide warning over labels
+                $shipdataexporter_sourcelabels.removeClass('blurred').find('#shipdataexporter_modewarning').hide();
+            }
+        },
+        useDefaultTemplate: function() {
+            if (ait.shipDataExporter.wysibbInBBCodeMode) {
+                var defaultTemplate = '[b][size=3]{name|*value}[/size][/b]\n' +
+                '\n' +
+                '[img]https://via.placeholder.com/550x400.png?text=Ship+Image+Here[/img]\n' +
+                '\n' +
+                '[b][size=3]Primary Ship Details[/size][/b]\n' +
+                '{type|*name}: {type|*value}\n' +
+                '{class|*name}: {class|*value}\n' +
+                '{manufacturer|*name}: {manufacturer|*value}\n' +
+                '{active_slots|*name}: {active_slots|*value}\n' +
+                '{passive_slots|*name}: {passive_slots|*value}\n' +
+                '{base_price|*name}: {base_price|*value}\n' +
+                '\n' +
+                '[b][size=3]Base Attributes[/size][/b]\n' +
+                '{base_shield|*name}: {base_shield|*value}\n' +
+                '{base_energy|*name}: {base_energy|*value}\n' +
+                '{impact_resistance|*name}: {impact_resistance|*value}\n' +
+                '{energy_resistance|*name}: {energy_resistance|*value}\n' +
+                '{explosive_resistance|*name}: {explosive_resistance|*value}\n' +
+                '\n' +
+                '{base_engine_burn|*name}: {base_engine_burn|*value}\n' +
+                '{base_recharge|*name}: {base_recharge|*value}\n' +
+                '{base_turn|*name}: {base_turn|*value}\n' +
+                '{base_thrust|*name}: {base_thrust|*value}\n' +
+                '{base_mass|*name}: {base_mass|*value}\n' +
+                '\n' +
+                '{base_cargo|*name}: {base_cargo|*value}\n' +
+                '{base_lifesupport|*name}: {base_lifesupport|*value}\n' +
+                '\n' +
+                '{base_scan_speed|*name}: {base_scan_speed|*value}\n' +
+                '{base_scan_max_targets|*name}: {base_scan_max_targets|*value}\n' +
+                '{base_scan_pulserange|*name}: {base_scan_pulserange|*value}\n' +
+                '{base_scan_pulsespeed|*name}: {base_scan_pulsespeed|*value}\n';
+
+                $shipdataexporter_template.bbcode(defaultTemplate);
+                $shipdataexporter_template.val(defaultTemplate);
+                $shipdataexporter_template.sync();
+            } else {
+                alert('Switch the editor to BBCode mode first');
             }
         },
         generateOutput: function() {
             // Generate output code, populate the modal then show it (don't forget copy to clipboard button)
-            console.log('Generate Output');
+            $shipdataexporter_outputarea.val($shipdataexporter_template.bbcode());
+            $modal_shipdataexporter_output.modal('show');
         }
     }
 

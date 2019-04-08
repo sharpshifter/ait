@@ -33,15 +33,35 @@ body {
     max-height: 110px;
     overflow-y: auto;
     user-select: none;
+    position: relative;
+
     > span.badge {
         cursor: pointer;
         &:hover {
             opacity: 0.85;
         }
     }
+    &.blurred {
+        pointer-events: none;
+
+        > span.badge {
+            filter: blur(3px);
+            opacity: 0.09;
+        }
+    }
+
     @media screen and (min-width: 768px) {
         max-height: none;
     }
+}
+
+#shipdataexporter_modewarning {
+    border-radius: 3px;
+    display: none;
+    height: 100%;
+    padding-top: 3.3%;
+    position: absolute;
+    width: 100%;
 }
 
 #shipdataexporter_generateoutput {
@@ -162,4 +182,14 @@ body {
             }
         }
     }
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.modal-content {
+    background-color: #202940;
+}
+.modal-top {
+    border-top: 1px solid transparent;
 }

@@ -168,8 +168,7 @@ var buildScripts = function (done) {
 					// Grab files that aren't polyfills, concatenate them, and process them
 					src([file.path + '/*.js', '!' + file.path + '/*' + paths.scripts.polyfills])
 						.pipe(concat(file.relative + '.js'))
-						.pipe(jsTasks())
-						.pipe(wait(500));
+						.pipe(jsTasks());
 
 				}
 
@@ -177,17 +176,17 @@ var buildScripts = function (done) {
 				// If separate polyfills enabled, this will have .polyfills in the filename
 				src(file.path + '/*.js')
 					.pipe(concat(file.relative + suffix + '.js'))
-					.pipe(jsTasks())
-					.pipe(wait(500));
+					.pipe(jsTasks());
 
 				return stream;
 
 			}
 
 			// Otherwise, process the file
-			return stream.pipe(jsTasks()).pipe(wait(500));
+			return stream.pipe(jsTasks());
 
-		}));
+		}))
+		.pipe(wait(500));
 
 	// Signal completion
 	done();

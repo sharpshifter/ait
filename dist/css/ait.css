@@ -44,16 +44,29 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  position: relative;
 }
 
-/* line 36, assets/scss/ait.scss */
+/* line 38, assets/scss/ait.scss */
 #shipdataexporter_sourcelabels > span.badge {
   cursor: pointer;
 }
 
-/* line 38, assets/scss/ait.scss */
+/* line 40, assets/scss/ait.scss */
 #shipdataexporter_sourcelabels > span.badge:hover {
   opacity: 0.85;
+}
+
+/* line 44, assets/scss/ait.scss */
+#shipdataexporter_sourcelabels.blurred {
+  pointer-events: none;
+}
+
+/* line 47, assets/scss/ait.scss */
+#shipdataexporter_sourcelabels.blurred > span.badge {
+  -webkit-filter: blur(3px);
+          filter: blur(3px);
+  opacity: 0.09;
 }
 
 @media screen and (min-width: 768px) {
@@ -63,21 +76,31 @@ body {
   }
 }
 
-/* line 47, assets/scss/ait.scss */
+/* line 58, assets/scss/ait.scss */
+#shipdataexporter_modewarning {
+  border-radius: 3px;
+  display: none;
+  height: 100%;
+  padding-top: 3.3%;
+  position: absolute;
+  width: 100%;
+}
+
+/* line 67, assets/scss/ait.scss */
 #shipdataexporter_generateoutput {
   margin-top: 5px;
   width: 88%;
 }
 
 @media screen and (min-width: 768px) {
-  /* line 47, assets/scss/ait.scss */
+  /* line 67, assets/scss/ait.scss */
   #shipdataexporter_generateoutput {
     width: 95%;
   }
 }
 
 @media screen and (min-width: 1140px) {
-  /* line 47, assets/scss/ait.scss */
+  /* line 67, assets/scss/ait.scss */
   #shipdataexporter_generateoutput {
     margin-top: -10px;
     margin-right: -25px;
@@ -86,56 +109,56 @@ body {
   }
 }
 
-/* line 61, assets/scss/ait.scss */
+/* line 81, assets/scss/ait.scss */
 .wysibb {
   border: none;
   background: #202940;
 }
 
-/* line 65, assets/scss/ait.scss */
+/* line 85, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar {
   border-bottom: 1px solid rgba(221, 221, 221, 0.2);
 }
 
-/* line 68, assets/scss/ait.scss */
+/* line 88, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container {
   border-right: 1px dotted rgba(221, 221, 221, 0.2);
 }
 
-/* line 70, assets/scss/ait.scss */
+/* line 90, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container:last-child {
   border-right: none;
 }
 
-/* line 75, assets/scss/ait.scss */
+/* line 95, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .fonticon {
   color: #eee;
   text-shadow: 0px 1px 0px rgba(32, 41, 64, 0);
 }
 
-/* line 79, assets/scss/ait.scss */
+/* line 99, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn:hover {
   border: 1px solid transparent;
   background: rgba(200, 242, 255, 0.2);
 }
 
-/* line 82, assets/scss/ait.scss */
+/* line 102, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn:hover .fonticon {
   color: #fff;
   text-shadow: 0px 1px 0px rgba(0, 9, 58, 0.3);
 }
 
-/* line 86, assets/scss/ait.scss */
+/* line 106, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn:hover span.val {
   color: #fff;
 }
 
-/* line 91, assets/scss/ait.scss */
+/* line 111, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-dropdown:hover, .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-select:hover {
   background: rgba(200, 242, 255, 0.2);
 }
 
-/* line 94, assets/scss/ait.scss */
+/* line 114, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-dropdown.on, .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-dropdown.on:active, .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-select.on, .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-select.on:active {
   border: 1px solid transparent;
   background: rgba(200, 242, 255, 0.2);
@@ -143,22 +166,22 @@ body {
           box-shadow: none;
 }
 
-/* line 99, assets/scss/ait.scss */
+/* line 119, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-dropdown .option:hover, .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-select .option:hover {
   background: rgba(60, 60, 60, 0.5);
 }
 
-/* line 103, assets/scss/ait.scss */
+/* line 123, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn span.btn-text {
   color: #fff;
 }
 
-/* line 107, assets/scss/ait.scss */
+/* line 127, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.on span.btn-text {
   color: #202940;
 }
 
-/* line 111, assets/scss/ait.scss */
+/* line 131, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list {
   border: none;
   -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
@@ -167,17 +190,17 @@ body {
   color: #fff;
 }
 
-/* line 117, assets/scss/ait.scss */
+/* line 137, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list :first-child {
   color: #eee;
 }
 
-/* line 119, assets/scss/ait.scss */
+/* line 139, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list :first-child:hover {
   color: #333;
 }
 
-/* line 123, assets/scss/ait.scss */
+/* line 143, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list .sc {
   width: 28px;
   height: 23px;
@@ -185,44 +208,59 @@ body {
   border: 1px solid transparent;
 }
 
-/* line 128, assets/scss/ait.scss */
+/* line 148, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list .sc:hover {
   border: 1px solid #333;
 }
 
-/* line 135, assets/scss/ait.scss */
+/* line 155, assets/scss/ait.scss */
 .wysibb .wysibb-toolbar .modeSwitch {
   word-wrap: normal;
 }
 
-/* line 140, assets/scss/ait.scss */
+/* line 160, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body {
   color: #fff;
   font-size: 14px;
 }
 
-/* line 144, assets/scss/ait.scss */
+/* line 164, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body b, .wysibb .wysibb-text-editor.wysibb-body strong {
   font-weight: 700;
 }
 
-/* line 147, assets/scss/ait.scss */
+/* line 167, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body a {
   text-decoration: underline;
 }
 
-/* line 150, assets/scss/ait.scss */
+/* line 170, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body .spoiler {
   border: 1px dashed rgba(255, 255, 255, 0.5);
   position: relative;
   margin-top: 12px;
 }
 
-/* line 155, assets/scss/ait.scss */
+/* line 175, assets/scss/ait.scss */
 .wysibb .wysibb-text-editor.wysibb-body .spoiler:before {
   content: 'SPOILER';
   position: absolute;
   top: -19px;
   font-size: 10px;
   color: #aaa;
+}
+
+/* line 187, assets/scss/ait.scss */
+.modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* line 190, assets/scss/ait.scss */
+.modal-content {
+  background-color: #202940;
+}
+
+/* line 193, assets/scss/ait.scss */
+.modal-top {
+  border-top: 1px solid transparent;
 }
