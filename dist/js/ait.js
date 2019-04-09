@@ -31,6 +31,10 @@
         resize_maxheight: 400
     }
 
+    // GTM dataLayer init
+    window.dataLayer = window.dataLayer || [];
+
+
     // Utility Functions
 
     /**
@@ -404,6 +408,21 @@
     $((function () {
         if ($shipdataexporter_sourcedata.length) ait.shipDataExporter.init();
         $shipdataexporter_sourcelabels.on('click', 'span.badge', (function (e) { ait.shipDataExporter.insertTag(e, this) }));
+
+        $('.main-panel .content').on('click', 'button', (function() {
+            window.dataLayer.push({
+                'event' : 'contentButtonClicked',
+                'elementText' : $(this).text(),
+                'elementID' : $(this).attr('id')
+            });
+        }));
+        $('.modal').on('click', 'button', (function() {
+            window.dataLayer.push({
+                'event' : 'modalButtonClicked',
+                'elementText' : $(this).text(),
+                'elementID' : $(this).attr('id')
+            });
+        }));
     }));
 
 }(window.ait = window.ait || {}, jQuery));
