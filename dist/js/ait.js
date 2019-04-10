@@ -55,7 +55,11 @@
     function makeBetterLabelText(str) {
         var result = '';
         var strArr = str.replace('_lifesupport', '_life_support');
-        strArr = strArr.replace('ls_', 'life_support_');
+        strArr = strArr.replace('ls_food', 'life_support_food');
+        strArr = strArr.replace('ls_water', 'life_support_water');
+        strArr = strArr.replace('ls_thermal', 'life_support_thermal');
+        strArr = strArr.replace('ls_waste', 'life_support_waste');
+        strArr = strArr.replace('specials_raw', 'special_attributes');
         strArr = strArr.split('_');
         for (var i = 0; i < strArr.length; i++) {
             if (i > 0) {
@@ -64,6 +68,48 @@
                 result += toTitleCase(strArr[i]);
             }
         }
+        return result;
+    }
+
+    /**
+     * Pass data values through a series of tests to pick out ones that need more processing, like "specials_raw"
+     * @param {Array} resultArray The data to check
+     */
+    function handleDataValues(resultArray) {
+        var result = '';
+
+        if (resultArray[1] == 'specials_raw') {
+            // This value contains special ability data that we need to process into a readable format
+            var specialsArr = [];
+            while((match = ait.shipDataExporter.shipSpecialsPattern.exec(resultArray[2])) != null) {
+                specialsArr.push(match);
+            }
+            
+            $.each(specialsArr, (function(idx, match) {
+                result += match[1] + ait.shipDataExporter.templateTagsSeparator + formatPotentialNumber(match[2]) + '\n';
+            }));
+        } else {
+            // This is just a normal value, pass it back
+            result = resultArray[2];
+        }
+
+        return result;
+    }
+
+    /**
+     * Check if the thing provided is a number and format it if so
+     * @param {*} thing Is it a bird, is it a plane? Nope, it's probably just a string..
+     */
+    function formatPotentialNumber(thing) {
+        var result;
+
+        if (!isNaN(thing)) {
+            // For now, this assumes that the thing is a float that we want to convert into percentage
+            result = (parseFloat(thing) * 100).toString() + '%';
+        } else {
+            result = thing;
+        }
+
         return result;
     }
 
@@ -113,7 +159,9 @@
         currentShipDataArray: [{}],
         shipInfoInputPattern: new RegExp(/SHIP_([^;]+);(.*)/g),
         shipInfoOutputPattern: new RegExp(/{([^\|\*]+)\|\*(\w+)}/g),
+        shipSpecialsPattern: new RegExp(/([^\#]+)\#([^\,]+)\,*/g),
         tagWatcherInterval: null,
+        footnoteBBCode: '[line]\n[size=1]Friendly details generated with [url=https://sharpshifter.net/ait/ship-info-exporter.html?ref=bb]AIT: Ship Info Exporter[/url][/size]\n',
 
         init: function () {
             // Enable the Process button when data has been entered
@@ -323,7 +371,10 @@
                         '{base_scan_speed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_speed|*value}\n' +
                         '{base_scan_max_targets|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_max_targets|*value}\n' +
                         '{base_scan_pulserange|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulserange|*value}\n' +
-                        '{base_scan_pulsespeed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulsespeed|*value}\n';
+                        '{base_scan_pulsespeed|*name}' + ait.shipDataExporter.templateTagsSeparator + '{base_scan_pulsespeed|*value}\n' +
+                        '\n' +
+                        '[b][size=3]{specials_raw|*name}[/size][/b]\n' +
+                        '{specials_raw|*value}\n';
 
                         // Note: WysiBB doesn't get .destroy()ed properly, so when other output options are available, we'll need to ask which format the user wants BEFORE any editors are created
                         $shipdataexporter_template.bbcode(defaultTemplate);
@@ -368,7 +419,7 @@
                         editorOutput = editorOutput.replace(tagMakeup, makeBetterLabelText(resultArray[1]));
                     } else if (match[2] == 'value') {
                         // This template tag wants its value, e.g. 480
-                        editorOutput = editorOutput.replace(tagMakeup, resultArray[2]);
+                        editorOutput = editorOutput.replace(tagMakeup, handleDataValues(resultArray));
                     }
                 } else {
                     // Somehow, there is no matching key in the ship data, so just remove this tag from the template
@@ -381,6 +432,13 @@
                     editorOutput = editorOutput.replace(tagMakeup, '');
                 }
             }));
+
+            // Add on cheeky footnote in the correct format
+            switch (ait.shipDataExporter.editorType) {
+                case 'wysibb':
+                    editorOutput += ait.shipDataExporter.footnoteBBCode;
+                    break;
+            }
 
             $shipdataexporter_outputarea.val(editorOutput);
             $modal_shipdataexporter_output.modal('show');
@@ -399,7 +457,6 @@
             return editorOutput;
         }
     }
-
 
 
     /**

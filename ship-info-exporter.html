@@ -10,15 +10,17 @@
   })(window,document,'script','dataLayer','GTM-NFW77S3');</script>
   <!-- End Google Tag Manager -->
 
-  <title>Astrox Imperium Tools</title>
+  <title>Ship Info Exporter - Astrox Imperium Tools</title>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
   <link href="./dist/css/font-awesome-470.min.css" rel="stylesheet">
-  <link href="./dist/editors/wysibb/theme/default/wbbtheme.css" type="text/css" rel="stylesheet" />
   <link href="./dist/css/material-dashboard.css" rel="stylesheet" />
   <link href="./dist/css/ait.css" rel="stylesheet" />
+  <script>
+      document.location='/';
+  </script>
 </head>
 
 <body class="dark-edition">
@@ -54,7 +56,7 @@
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/ship-info-exporter.html">Ship Info Exporter</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -99,78 +101,20 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-12 col-xs-12">
-              <p class="text-light">Welcome to a collection of various tools to do various things relating to the game Astrox Imperium. Well it's not really a collection at the moment as there is only one tool (displayed below), but more should appear over time and be accessible via the side navigation. For the security conscious, rest assured everything is processed via client-side only JavaScript - the data you enter here is not sent to any servers. Google Analytics and Tag Manager are only used to help me understand how people use this site - it's <a href="https://www.google.com/search?q=how+to+block+google+analytics" target="_blank" rel="nofollow">easy to block</a> if you wish.</p>
+              <p class="text-light">The Ship Info Exporter will have it's own page eventually, but for now it's on the homepage. If you've not been redirected there, <a href="/">click here to go to the homepage</a>.</p>
             </div>
           </div>
-          <hr class="mt-1 mb-1">
           <noscript>
             <div class="row">
-              <div class="col-12">
+                <div class="col-12">
                 <div class="card">
-                  <div class="card-header card-header-danger">
+                    <div class="card-header card-header-danger">
                     It appears you have JavaScript disabled. There's not much on this site that will work without it!
-                  </div>
+                    </div>
                 </div>
-              </div>
+                </div>
             </div>
           </noscript>
-          <div id="shipdataexporter" class="row">
-            <div class="col-xl-4 col-xs-12">
-              <h3><i class="fa fa-rocket fa-fw mr-1"></i> Ship Info Exporter</h3>
-              <p>Provided with the contents of a ship data file, this tool will allow you to customise and export the data into useful formats such as BBCode, Markdown (eventually) and HTML (also eventually). The output can then be pasted into other websites, for example <a href="https://steamcommunity.com/app/954870/discussions/" target="_blank">Steam discussions</a> or <a href="https://www.nexusmods.com/astroximperium" target="_blank">Nexus Mods</a>.</p>
-              <br>
-              <div class="card">
-                  <div class="card-header card-header-info">
-                      <h4 class="card-title"><i class="material-icons-outlined mr-2">description</i> Source Ship Data</h4>
-                  </div>
-                <div class="card-body">
-                  <div class="form-group mt-3">
-                      <label for="shipdataexporter_sourcedata">Paste the contents of a ship data file here:</label>
-                      <textarea class="form-control" id="shipdataexporter_sourcedata" rows="14"></textarea>
-                      <div class="mt-3 text-right">
-                        <button id="shipdataexporter_process" class="btn btn-primary disabled" onclick="ait.shipDataExporter.startProcess()">Process</button>
-                      </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons-outlined mr-2">info</i> Ship data files can be found in the Astrox Imperium_Data\MOD\ships folder, inside your Astrox Imperium install directory. File input is a planned feature!
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="shipdataexporter_labelsandtemplate" class="col-xl-8 col-xs-12 d-none">
-              <div class="card">
-                <div class="card-header card-header-info">
-                  <h4 class="card-title"><i class="material-icons mr-2">web</i> Template Editor</h4>
-                </div>
-                <div class="card-body">
-                  <button id="shipdataexporter_usedefaulttemplate" class="btn btn-primary mb-3" onclick="ait.shipDataExporter.useDefaultTemplate()">Use Default Template</button>
-                  <small class="usedefaulttemplatewarning ml-2 text-warning"><i class="material-icons">warning</i> Note: this will remove any changes you have made in the template editor!</small>
-                  <hr class="mt-1 mb-2">
-                  <p>Click a label to insert its <strong class="tagcolourboth">Name and Value</strong> tags into the template at the cursor position.<strong> Shift</strong>+click inserts just its <strong class="tagcolourname">Name</strong> tag.<strong> Alt</strong>+click inserts just its <strong class="tagcolourvalue">Value</strong> tag.</p>
-                  <div id="shipdataexporter_modewarning" class="border border-danger text-light text-center">Due to bugs with the editor, label insertion has been disabled while it is in BBCode mode. Switch back to normal mode to be able to insert labels again.</div>
-                  <div id="shipdataexporter_sourcelabels" class="mb-3"></div>
-                  <div class="form-group">
-                    <textarea class="form-control" id="shipdataexporter_template" rows="16"></textarea>
-                    <p class="mt-2">Once you're happy with the template, press Generate Output to generate code that can be copied to other websites.</p>
-                  </div>
-                </div>
-                <div class="card-footer">
-                  <div class="row fullwidth">
-                    <div class="col-xl-8 col-xs-12 text-left">
-                      <div class="stats">
-                        <i class="material-icons-outlined mr-2">info</i> Saving templates, "Share" features and more code formats (e.g. Markdown, HTML) are all planned to be added.
-                      </div>
-                    </div>
-                    <div class="col-xl-4 col-xs-12 text-right">
-                      <button id="shipdataexporter_generateoutput" class="btn btn-primary" onclick="ait.shipDataExporter.generateOutput()">Generate Output</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>
@@ -193,26 +137,6 @@
     </div>
   </div>
 
-  <!-- Modals -->
-  <div id="modal_shipdataexporter_output" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Generated Code</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <textarea id="shipdataexporter_outputarea" class="form-control" rows="20"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button id="shipdataexporter_copytoclipboard" type="button" class="btn btn-primary" data-clipboard-target="#shipdataexporter_outputarea">Copy to Clipboard</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Core -->
   <script src="./dist/js/jquery.js"></script>
   <script src="./dist/js/popper.js"></script>
@@ -220,7 +144,6 @@
   <script src="./dist/js/default-passive-events.js"></script>
   <script src="./dist/js/buttons.js"></script>
   <script src="./dist/js/plugins.js"></script>
-  <script src="./dist/editors/wysibb/jquery.wysibb.min.js"></script>
   <script src="./dist/js/material-dashboard.js"></script>
   <script src="./dist/js/main.js"></script>
   <script src="./dist/js/ait.js"></script>
