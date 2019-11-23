@@ -24,35 +24,35 @@ var paths = {
   	output: 'dist/',
 	scripts: {
 		input: [
-			'assets/js/core/jquery.js',
-			'assets/js/core/popper.js',
-			'assets/js/core/default-passive-events.js',
-			'assets/js/core/buttons.js',
-			'assets/js/core/bootstrap-material-design.js',
-			'assets/js/*',
-			'assets/js/material-dashboard.js',
-			'assets/js/main.js'
+			'../../assets/js/core/jquery.js',
+			'../../assets/js/core/popper.js',
+			'../../assets/js/core/default-passive-events.js',
+			'../../assets/js/core/buttons.js',
+			'../../assets/js/core/bootstrap-material-design.js',
+			'../../assets/js/*',
+			'../../assets/js/material-dashboard.js',
+			'../../assets/js/main.js'
 		],
-		polyfills: '.polyfill.js',
-		output: 'dist/js/'
+		polyfills: '../../.polyfill.js',
+		output: '../../dist/js/'
 	},
 	styles: {
-		input: 'assets/scss/**/*.{scss,sass}',
-		output: 'dist/css/'
+		input: '../../assets/scss/**/*.{scss,sass}',
+		output: '../../dist/css/'
 	},
 	svgs: {
-		input: 'assets/svg/*.svg',
-		output: 'dist/svg/'
+		input: '../../assets/svg/*.svg',
+		output: '../../dist/svg/'
 	},
 	copy: {
-		input: 'assets/copy/**/*',
-		output: './'
+		input: '../../assets/copy/**/*',
+		output: '../.././'
 	},
 	replace: {
-		input: './*.html',
-		output: './'
+		input: '../.././*.html',
+		output: '../.././'
 	},
-	reload: './'
+	reload: '../.././'
 };
 
 
@@ -103,7 +103,7 @@ var optimizejs = require('gulp-optimize-js');
 // Styles
 var sass = require('gulp-sass');
 var prefix = require('gulp-autoprefixer');
-var minify = require('gulp-cssnano');
+var cleanCSS = require('gulp-clean-css');
 
 // SVGs
 var svgmin = require('gulp-svgmin');
@@ -223,18 +223,13 @@ var buildStyles = function (done) {
 			sourceComments: true
 		}))
 		.pipe(prefix({
-			browsers: ['last 2 version', '> 0.25%'],
 			cascade: true,
 			remove: true
 		}))
 		.pipe(header(banner.full, { package : package }))
 		.pipe(dest(paths.styles.output))
 		.pipe(rename({suffix: '.min'}))
-		.pipe(minify({
-			discardComments: {
-				removeAll: true
-			}
-		}))
+		.pipe(cleanCSS())
 		.pipe(header(banner.min, { package : package }))
 		.pipe(dest(paths.styles.output))
 		.pipe(wait(250));
